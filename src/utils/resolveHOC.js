@@ -29,7 +29,21 @@ export default function resolveHOC(path: NodePath): NodePath {
     !isReactForwardRefCall(path)
   ) {
     if (node.arguments.length) {
-      return resolveHOC(path.get('arguments', node.arguments.length - 1));
+      const inner = path.get('arguments', 0);
+
+      // If the first argument is one of these types then the component might be the last argument
+      // If there are all identifiers then we cannot figure out exactly and have to assume it is the first
+      if (
+        node.arguments.length > 1 &&
+        (types.Literal.check(inner.node) ||
+          types.ObjectExpression.check(inner.node) ||
+          types.ArrayExpression.check(inner.node) ||
+          types.SpreadElement.check(inner.node))
+      ) {
+        return resolveHOC(path.get('arguments', node.arguments.length - 1));
+      }
+
+      return resolveHOC(inner);
     }
   }
 
