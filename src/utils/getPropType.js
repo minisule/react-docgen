@@ -82,6 +82,7 @@ function getPropTypeOneOfType(argumentPath) {
       const docs = getDocblock(itemPath);
       if (docs) {
         descriptor.description = docs;
+        descriptor.framer = docs.includes('Appearance:');
       }
       return descriptor;
     });
@@ -152,6 +153,7 @@ function getPropTypeShapish(name, argumentPath) {
       const docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
+        descriptor.framer = docs.includes('Appearance:');
       }
       descriptor.required = isRequiredPropType(propertyPath.get('value'));
       value[propertyName] = descriptor;

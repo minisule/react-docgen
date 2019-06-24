@@ -37,6 +37,7 @@ export type PropTypeDescriptor = {
   // Consider consolidating PropTypeDescriptor and PropDescriptor
   description?: string,
   required?: boolean,
+  framer?: boolean,
 };
 
 export type FlowBaseType = {
@@ -117,6 +118,7 @@ export type PropDescriptor = {
   required?: boolean,
   defaultValue?: any,
   description?: string,
+  framer?: boolean,
 };
 
 export type Handler = (

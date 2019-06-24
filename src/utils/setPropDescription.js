@@ -19,4 +19,7 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
   if (propDescriptor.description) return;
 
   propDescriptor.description = getDocblock(propertyPath) || '';
+  propDescriptor.framer = propDescriptor.description.includes('Appearance:')
+    ? true
+    : false;
 };
