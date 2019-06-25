@@ -19,7 +19,9 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
   if (propDescriptor.description) return;
 
   propDescriptor.description = getDocblock(propertyPath) || '';
-  propDescriptor.framer = propDescriptor.description.includes('Appearance:')
+  propDescriptor.createControl = propDescriptor.description.includes(
+    '@Appearance',
+  )
     ? true
     : false;
 
@@ -29,12 +31,13 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
 
   fields.forEach(field => {
     if (field.includes(' ')) {
-      documentation.set(
-        field.substring(1, field.indexOf(' ')),
-        field.substring(field.indexOf(' ') + 1),
-      );
+      propDescriptor.fields.push({
+        [field.substring(1, field.indexOf(' '))]: field.substring(
+          field.indexOf(' ') + 1,
+        ),
+      });
     } else {
-      documentation.set(field.substring(1), true);
+      propDescriptor.fields.push({ [field.substring(1)]: true });
     }
   });
 };
