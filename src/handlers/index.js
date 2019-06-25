@@ -26,3 +26,4 @@ export {
 export { default as propDocBlockHandler } from './propDocBlockHandler';
 export { default as displayNameHandler } from './displayNameHandler';
 export { default as flowTypeHandler } from './flowTypeHandler';
+export { default as fieldHandler } from './componentSupplementaryFieldsHandler';

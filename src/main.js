@@ -28,6 +28,7 @@ const defaultHandlers = [
   allHandlers.displayNameHandler,
   allHandlers.componentMethodsHandler,
   allHandlers.componentMethodsJsDocHandler,
+  allHandlers.fieldHandler,
 ];
 
 /**

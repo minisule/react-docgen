@@ -38,6 +38,7 @@ export type PropTypeDescriptor = {
   description?: string,
   required?: boolean,
   framer?: boolean,
+  fields?: any[],
 };
 
 export type FlowBaseType = {
@@ -119,6 +120,7 @@ export type PropDescriptor = {
   defaultValue?: any,
   description?: string,
   framer?: boolean,
+  fields?: any[],
 };
 
 export type Handler = (

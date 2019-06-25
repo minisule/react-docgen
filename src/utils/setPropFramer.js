@@ -18,23 +18,5 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
   const propDescriptor = documentation.getPropDescriptor(propName);
   if (propDescriptor.description) return;
 
-  propDescriptor.description = getDocblock(propertyPath) || '';
-  propDescriptor.framer = propDescriptor.description.includes('Appearance:')
-    ? true
-    : false;
-
-  const fields = propDescriptor.description
-    .split('\n')
-    .filter(line => line.includes('@'));
-
-  fields.forEach(field => {
-    if (field.includes(' ')) {
-      documentation.set(
-        field.substring(1, field.indexOf(' ')),
-        field.substring(field.indexOf(' ') + 1),
-      );
-    } else {
-      documentation.set(field.substring(1), true);
-    }
-  });
+  propDescriptor.framer = getDocblock(propertyPath, true) || '';
 };
