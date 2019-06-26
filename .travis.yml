@@ -17,7 +17,7 @@ before_deploy: yarn build:website
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $GITHUB_DEPLOY_TOKEN
+  github_token: $GITHUB_TOKEN 
   local_dir: website/dist
   on:
     branch: master
