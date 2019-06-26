@@ -6,7 +6,7 @@
  *
  * @flow
  */
-
+import type { PropDescriptor } from '../types';
 import type Documentation from '../Documentation';
 import getPropertyName from './getPropertyName';
 import { getDocblock } from './docblock';
@@ -15,29 +15,35 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
   const propName = getPropertyName(propertyPath);
   if (!propName) return;
 
-  const propDescriptor = documentation.getPropDescriptor(propName);
-  if (propDescriptor.description) return;
-
-  propDescriptor.description = getDocblock(propertyPath) || '';
-  propDescriptor.createControl = propDescriptor.description.includes(
-    '@Appearance',
-  )
-    ? true
-    : false;
-
-  const fields = propDescriptor.description
-    .split('\n')
-    .filter(line => line.includes('@'));
-
-  fields.forEach(field => {
-    if (field.includes(' ')) {
-      propDescriptor.fields.push({
-        [field.substring(1, field.indexOf(' '))]: field.substring(
-          field.indexOf(' ') + 1,
-        ),
-      });
-    } else {
-      propDescriptor.fields.push({ [field.substring(1)]: true });
+  const propDescriptor: PropDescriptor = documentation.getPropDescriptor(
+    propName,
+  );
+  if (propDescriptor.description) {
+    return;
+  } else {
+    propDescriptor.description = getDocblock(propertyPath) || '';
+    if (propDescriptor.description.includes('Appearance:')) {
+      propDescriptor.createControl = true;
     }
-  });
+
+    const { fields } = propDescriptor;
+    const { description } = propDescriptor;
+    // Account for flow Refinement
+    if (description === undefined || fields === undefined) {
+      return;
+    }
+    const splitLines = description.split('\n');
+    const lines = splitLines.filter(line => line.includes('@'));
+    lines.forEach(field => {
+      if (field.includes(' ')) {
+        fields.push({
+          [field.substring(1, field.indexOf(' '))]: field.substring(
+            field.indexOf(' ') + 1,
+          ),
+        });
+      } else {
+        fields.push({ [field.substring(1)]: true });
+      }
+    });
+  }
 };

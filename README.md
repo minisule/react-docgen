@@ -1,8 +1,13 @@
-# react-docgen [![Build Status](https://travis-ci.org/reactjs/react-docgen.svg?branch=master)](https://travis-ci.org/reactjs/react-docgen)
+# react-docgen-framer-extension [![Build Status](https://travis-ci.com/minisule/react-docgen-framer-extension.svg?branch=master)](https://travis-ci.com/minisule/react-docgen-framer-extension)
+This project was forked from `react-docgen`. Additional logging features were added through additional handlers. JS DOC tags can now be added to a specific section within the react docgen JSON. Individual tags on proptypes additionally cascade down to the appropriate sections. See output examples below for more clarification. 
+
+Additionally, for project specific needs, a "createControl" key is available on each prop. It is set to true based on whether the string "Appearance:" appears on the JS Doc for a proptype. This specifies if a Control within framer X should be specified for the associated prop. In the future, this will be extended to match any _magic string_ that is specified by the user via configuration or command line options.
 
 `react-docgen` is a CLI and toolbox to help extracting information from [React][] components, and generate documentation from it.
 
 It uses [ast-types][] and [@babel/parser][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
+
+The majority of this README follows from react-docgen's README with a few modifications specific to this fork.
 
 It provides a default implementation for React components defined via
 `React.createClass`, [ES2015 class definitions][classes] or functions
@@ -16,16 +21,16 @@ guidelines in order to be analyzable (see below for more info).
 Install the module with yarn or npm:
 
 ```
-yarn add react-docgen --dev
+yarn add react-docgen-framer-extension --dev
 ```
 
 ```
-npm install --save-dev react-docgen
+npm install --save-dev react-docgen-framer-extension
 ```
 
 ## CLI
 
-Installing the module adds a `react-docgen` executable which allows you to convert
+Installing the module adds a `react-docgen-framer-extension` executable which allows you to convert
 a single file, multiple files or an input stream. We are trying to make the
 executable as versatile as possible so that it can be integrated into many
 workflows.
@@ -66,7 +71,7 @@ it will fallback to a default configuration, enabling all [syntax extension](htt
 The tool can be used programmatically to extract component information and customize the extraction process:
 
 ```js
-var reactDocs = require('react-docgen');
+var reactDocs = require('react-docgen-framer-extension');
 var componentInfo = reactDocs.parse(src);
 ```
 
@@ -178,7 +183,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * General component description.
+ * General component description. Tag 1 is a string description. Tag 2 is a boolean since it
+ * has no text on the same line.
+ * @Tag1 This is a basic tag description
+ * @Tag2
  */
 class MyComponent extends Component {
   render() {
@@ -188,8 +196,11 @@ class MyComponent extends Component {
 
 MyComponent.propTypes = {
   /**
-   * Description of prop "foo".
-   */
+  * Appearance: Prop description. This prop will have create control set to true
+  * since it has the string "Appearance:"
+  * @Option1 This tag will appear under fields for this prop
+  * @Option2
+  */
   foo: PropTypes.number.isRequired,
   /**
    * Description of prop "bar" (a custom validation function).
@@ -216,8 +227,17 @@ we are getting this output:
       "type": {
         "name": "number"
       },
+      fields: [
+        {
+            option1: "This tag will appear under fields for this prop"
+        },
+        {
+            option2: true
+        }
+      ]
       "required": true,
-      "description": "Description of prop \"foo\"."
+      "description": "Description of prop \"foo\".",
+      "createControl": true
     },
     "bar": {
       "type": {
@@ -225,6 +245,7 @@ we are getting this output:
       },
       "required": false,
       "description": "Description of prop \"bar\" (a custom validation function).",
+      "createControl": false,
       "defaultValue": {
         "value": "21",
         "computed": false
@@ -243,10 +264,14 @@ we are getting this output:
         ]
       },
       "required": false,
-      "description": ""
+      "description": "",
+      "createControl": false
     }
   },
-  "description": "General component description."
+  "Tag1": "This is a basic tag description",
+  "Tag2": true,
+  "description": "Tag 1 is a string description. Tag 2 is a boolean since it
+   has no text on the same line."
 }
 ```
 
@@ -426,3 +451,4 @@ The structure of the JSON blob / JavaScript object is as follows:
 [ast-types]: https://github.com/benjamn/ast-types
 [@babel/parser]: https://github.com/babel/babel/tree/master/packages/babel-parser
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+

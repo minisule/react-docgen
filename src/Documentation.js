@@ -47,7 +47,6 @@ class Documentation {
     let propDescriptor = this._props.get(propName);
     if (!propDescriptor) {
       this._props.set(propName, (propDescriptor = {}));
-      propDescriptor.fields = [];
     }
 
     return propDescriptor;
