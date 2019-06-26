@@ -1,12 +1,12 @@
 {
-  "name": "react-docgen",
-  "version": "5.0.0-beta.1",
+  "name": "react-docgen-framer-extension",
+  "version": "1.0.0",
   "description": "A CLI and toolkit to extract information from React components for documentation generation.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactjs/react-docgen.git"
+    "url": "https://github.com/minisule/react-docgen-framer-extension.git"
   },
-  "bugs": "https://github.com/reactjs/react-docgen/issues",
+  "bugs": "https://github.com/minisule/react-docgen-framer-extension/issues",
   "bin": {
     "react-docgen": "bin/react-docgen.js"
   },
@@ -34,7 +34,7 @@
     "react",
     "documentation-generation"
   ],
-  "author": "Felix Kling",
+  "author": "Alex Kyei",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.4.4",
