@@ -26,23 +26,35 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
       propDescriptor.createControl = true;
     }
 
-    const { fields } = propDescriptor;
     const { description } = propDescriptor;
     // Account for flow Refinement
-    if (description === undefined || fields === undefined) {
+    if (description === undefined) {
       return;
     }
     const splitLines = description.split('\n');
     const lines = splitLines.filter(line => line.includes('@'));
+    propDescriptor.description = description
+      .replace(/^(?!@ignore)@\S+.*$/gm, '')
+      .trim();
+    if (!Array.isArray(lines) || !lines.length) {
+      return;
+    }
+
     lines.forEach(field => {
-      if (field.includes(' ')) {
-        fields.push({
-          [field.substring(1, field.indexOf(' '))]: field.substring(
-            field.indexOf(' ') + 1,
-          ),
-        });
-      } else {
-        fields.push({ [field.substring(1)]: true });
+      if (!field.startsWith('@ignore')) {
+        if (propDescriptor.fields === undefined) {
+          propDescriptor.fields = [];
+        }
+        const { fields } = propDescriptor;
+        if (field.includes(' ')) {
+          fields.push({
+            [field.substring(1, field.indexOf(' '))]: field.substring(
+              field.indexOf(' ') + 1,
+            ),
+          });
+        } else {
+          fields.push({ [field.substring(1)]: true });
+        }
       }
     });
   }

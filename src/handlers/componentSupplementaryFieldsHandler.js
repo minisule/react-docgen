@@ -14,4 +14,8 @@ export default function fieldHandler(documentation: Documentation) {
       documentation.set(field.substring(1), true);
     }
   });
+  documentation.set(
+    'description',
+    description.replace(/^(?!@ignore)@\S+.*$/gm, '').trim() || '',
+  );
 }
