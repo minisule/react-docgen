@@ -82,8 +82,40 @@ function getPropTypeOneOfType(argumentPath) {
       const docs = getDocblock(itemPath);
       if (docs) {
         descriptor.description = docs;
-        if (descriptor.description.includes('Appearance')) {
-          descriptor.createControl = true;
+      }
+      const { description } = descriptor;
+      if (description !== undefined) {
+        const splitLines = description.split('\n');
+        const lines = splitLines.filter(line => line.includes('@'));
+        descriptor.description = description
+          .replace(/^(?!@ignore)@\S+.*$/gm, '')
+          .trim();
+        if (!Array.isArray(lines) || !lines.length) {
+          //No op
+        } else {
+          lines.forEach(field => {
+            if (!field.startsWith('@ignore')) {
+              if (descriptor.fields === undefined) {
+                descriptor.fields = [];
+              }
+              const { fields } = descriptor;
+              if (field.includes(' ')) {
+                if (field.startsWith('@Appearance')) {
+                  descriptor.createControl = true;
+                }
+                fields.push({
+                  [field.substring(1, field.indexOf(' '))]: field.substring(
+                    field.indexOf(' ') + 1,
+                  ),
+                });
+              } else {
+                if (field.startsWith('@Appearance')) {
+                  descriptor.createControl = true;
+                }
+                fields.push({ [field.substring(1)]: true });
+              }
+            }
+          });
         }
       }
       return descriptor;
@@ -155,12 +187,43 @@ function getPropTypeShapish(name, argumentPath) {
       const docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
-        if (descriptor.description.includes('Appearance:')) {
-          descriptor.createControl = true;
-        }
       }
       descriptor.required = isRequiredPropType(propertyPath.get('value'));
       value[propertyName] = descriptor;
+      const { description } = descriptor;
+      if (description !== undefined) {
+        const splitLines = description.split('\n');
+        const lines = splitLines.filter(line => line.includes('@'));
+        descriptor.description = description
+          .replace(/^(?!@ignore)@\S+.*$/gm, '')
+          .trim();
+        if (!Array.isArray(lines) || !lines.length) {
+          return;
+        }
+        lines.forEach(field => {
+          if (!field.startsWith('@ignore')) {
+            if (descriptor.fields === undefined) {
+              descriptor.fields = [];
+            }
+            const { fields } = descriptor;
+            if (field.includes(' ')) {
+              if (field.startsWith('@Appearance')) {
+                descriptor.createControl = true;
+              }
+              fields.push({
+                [field.substring(1, field.indexOf(' '))]: field.substring(
+                  field.indexOf(' ') + 1,
+                ),
+              });
+            } else {
+              if (field.startsWith('@Appearance')) {
+                descriptor.createControl = true;
+              }
+              fields.push({ [field.substring(1)]: true });
+            }
+          }
+        });
+      }
     });
     type.value = value;
   }
