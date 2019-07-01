@@ -22,9 +22,6 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
     return;
   } else {
     propDescriptor.description = getDocblock(propertyPath) || '';
-    if (propDescriptor.description.includes('Appearance:')) {
-      propDescriptor.createControl = true;
-    }
 
     const { description } = propDescriptor;
     // Account for flow Refinement
@@ -47,12 +44,18 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
         }
         const { fields } = propDescriptor;
         if (field.includes(' ')) {
+          if (field.startsWith('@Appearance')) {
+            propDescriptor.createControl = true;
+          }
           fields.push({
             [field.substring(1, field.indexOf(' '))]: field.substring(
               field.indexOf(' ') + 1,
             ),
           });
         } else {
+          if (field.startsWith('@Appearance')) {
+            propDescriptor.createControl = true;
+          }
           fields.push({ [field.substring(1)]: true });
         }
       }
