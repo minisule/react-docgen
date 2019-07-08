@@ -44,7 +44,9 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
         }
         const { fields } = propDescriptor;
         if (field.includes(' ')) {
-          if (field.startsWith('@Appearance')) {
+          if (field.startsWith('@framer-ignore')) {
+            propDescriptor.createControl = false;
+          } else {
             propDescriptor.createControl = true;
           }
           fields.push({
@@ -53,7 +55,9 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
             ),
           });
         } else {
-          if (field.startsWith('@Appearance')) {
+          if (field.startsWith('@framer-ignore')) {
+            propDescriptor.createControl = false;
+          } else {
             propDescriptor.createControl = true;
           }
           fields.push({ [field.substring(1)]: true });

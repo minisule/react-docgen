@@ -100,7 +100,9 @@ function getPropTypeOneOfType(argumentPath) {
               }
               const { fields } = descriptor;
               if (field.includes(' ')) {
-                if (field.startsWith('@Appearance')) {
+                if (field.startsWith('@framer-ignore')) {
+                  descriptor.createControl = false;
+                } else {
                   descriptor.createControl = true;
                 }
                 fields.push({
@@ -109,7 +111,9 @@ function getPropTypeOneOfType(argumentPath) {
                   ),
                 });
               } else {
-                if (field.startsWith('@Appearance')) {
+                if (field.startsWith('@framer-ignore')) {
+                  descriptor.createControl = false;
+                } else {
                   descriptor.createControl = true;
                 }
                 fields.push({ [field.substring(1)]: true });
@@ -207,7 +211,9 @@ function getPropTypeShapish(name, argumentPath) {
             }
             const { fields } = descriptor;
             if (field.includes(' ')) {
-              if (field.startsWith('@Appearance')) {
+              if (field.startsWith('@framer-ignore')) {
+                descriptor.createControl = false;
+              } else {
                 descriptor.createControl = true;
               }
               fields.push({
@@ -216,7 +222,9 @@ function getPropTypeShapish(name, argumentPath) {
                 ),
               });
             } else {
-              if (field.startsWith('@Appearance')) {
+              if (field.startsWith('@framer-ignore')) {
+                descriptor.createControl = false;
+              } else {
                 descriptor.createControl = true;
               }
               fields.push({ [field.substring(1)]: true });
