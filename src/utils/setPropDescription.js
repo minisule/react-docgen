@@ -36,9 +36,11 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
     if (!Array.isArray(lines) || !lines.length) {
       return;
     }
-
     lines.forEach(field => {
       if (!field.startsWith('@ignore')) {
+        if (propDescriptor.createControl === undefined) {
+          propDescriptor.createControl = true;
+        }
         if (propDescriptor.fields === undefined) {
           propDescriptor.fields = [];
         }
@@ -46,8 +48,6 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
         if (field.includes(' ')) {
           if (field.startsWith('@framer-ignore')) {
             propDescriptor.createControl = false;
-          } else {
-            propDescriptor.createControl = true;
           }
           fields.push({
             [field.substring(1, field.indexOf(' '))]: field.substring(
@@ -57,8 +57,6 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
         } else {
           if (field.startsWith('@framer-ignore')) {
             propDescriptor.createControl = false;
-          } else {
-            propDescriptor.createControl = true;
           }
           fields.push({ [field.substring(1)]: true });
         }
