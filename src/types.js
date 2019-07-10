@@ -37,7 +37,7 @@ export type PropTypeDescriptor = {
   // Consider consolidating PropTypeDescriptor and PropDescriptor
   description?: string,
   required?: boolean,
-  createControl?: boolean,
+  ignoreControl?: boolean,
   fields?: Array<Object>,
 };
 
@@ -119,7 +119,7 @@ export type PropDescriptor = {
   required?: boolean,
   defaultValue?: any,
   description?: string,
-  createControl?: boolean,
+  ignoreControl?: boolean,
   fields?: Array<Object>,
 };
 

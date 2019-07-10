@@ -93,7 +93,6 @@ function getPropTypeOneOfType(argumentPath) {
         if (!Array.isArray(lines) || !lines.length) {
           //No op
         } else {
-          descriptor.createControl = true;
           lines.forEach(field => {
             if (!field.startsWith('@ignore')) {
               if (descriptor.fields === undefined) {
@@ -102,7 +101,7 @@ function getPropTypeOneOfType(argumentPath) {
               const { fields } = descriptor;
               if (field.includes(' ')) {
                 if (field.startsWith('@framer-ignore')) {
-                  descriptor.createControl = false;
+                  descriptor.ignoreControl = true;
                 }
                 fields.push({
                   [field.substring(1, field.indexOf(' '))]: field.substring(
@@ -111,7 +110,7 @@ function getPropTypeOneOfType(argumentPath) {
                 });
               } else {
                 if (field.startsWith('@framer-ignore')) {
-                  descriptor.createControl = false;
+                  descriptor.ignoreControl = true;
                 }
                 fields.push({ [field.substring(1)]: true });
               }
@@ -203,9 +202,6 @@ function getPropTypeShapish(name, argumentPath) {
         }
 
         lines.forEach(field => {
-          if (descriptor.createControl === undefined) {
-            descriptor.createControl = true;
-          }
           if (!field.startsWith('@ignore')) {
             if (descriptor.fields === undefined) {
               descriptor.fields = [];
@@ -213,7 +209,7 @@ function getPropTypeShapish(name, argumentPath) {
             const { fields } = descriptor;
             if (field.includes(' ')) {
               if (field.startsWith('@framer-ignore')) {
-                descriptor.createControl = false;
+                descriptor.ignoreControl = true;
               }
               fields.push({
                 [field.substring(1, field.indexOf(' '))]: field.substring(
@@ -222,7 +218,7 @@ function getPropTypeShapish(name, argumentPath) {
               });
             } else {
               if (field.startsWith('@framer-ignore')) {
-                descriptor.createControl = false;
+                descriptor.ignoreControl = true;
               }
               fields.push({ [field.substring(1)]: true });
             }

@@ -22,7 +22,6 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
     return;
   } else {
     propDescriptor.description = getDocblock(propertyPath) || '';
-
     const { description } = propDescriptor;
     // Account for flow Refinement
     if (description === undefined) {
@@ -38,16 +37,13 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
     }
     lines.forEach(field => {
       if (!field.startsWith('@ignore')) {
-        if (propDescriptor.createControl === undefined) {
-          propDescriptor.createControl = true;
-        }
         if (propDescriptor.fields === undefined) {
           propDescriptor.fields = [];
         }
         const { fields } = propDescriptor;
         if (field.includes(' ')) {
           if (field.startsWith('@framer-ignore')) {
-            propDescriptor.createControl = false;
+            propDescriptor.ignoreControl = true;
           }
           fields.push({
             [field.substring(1, field.indexOf(' '))]: field.substring(
@@ -56,7 +52,7 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
           });
         } else {
           if (field.startsWith('@framer-ignore')) {
-            propDescriptor.createControl = false;
+            propDescriptor.ignoreControl = true;
           }
           fields.push({ [field.substring(1)]: true });
         }
