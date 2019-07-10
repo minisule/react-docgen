@@ -18,7 +18,6 @@ const Component = React.createClass({
      * since it has the string "Appearance:"
      * @Option1 This tag will appear under fields for this prop
      * @Option2
-     *
      */
     bar: React.PropTypes.number,
   },
