@@ -42,7 +42,7 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
         }
         const { fields } = propDescriptor;
         if (field.includes(' ')) {
-          if (field.startsWith('@framer-ignore')) {
+          if (field.startsWith('@framerIgnore')) {
             propDescriptor.ignoreControl = true;
           }
           fields.push({
@@ -51,7 +51,7 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
             ),
           });
         } else {
-          if (field.startsWith('@framer-ignore')) {
+          if (field.startsWith('@framerIgnore')) {
             propDescriptor.ignoreControl = true;
           }
           fields.push({ [field.substring(1)]: true });
